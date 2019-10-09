@@ -1,0 +1,20 @@
+﻿@model ContactList.Features.Contact.EditContact.Command
+@{
+    ViewBag.Title = "Edit Contact";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+
+    @Html.Input(x => x.Email)
+    @Html.Input(x => x.Name)
+    @Html.Input(x => x.PhoneNumber)
+
+    <div>
+        @Html.SaveButton()
+        @Html.CancelButton(Url.Action("Index"))
+    </div>
+}

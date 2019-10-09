@@ -1,0 +1,18 @@
+﻿@model ContactList.Features.Contact.AddContact.Command
+@{
+    ViewBag.Title = "Add New Contact";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@using (Html.BeginForm())
+{
+    @Html.Input(x => x.Email)
+    @Html.Input(x => x.Name)
+    @Html.Input(x => x.PhoneNumber)
+
+    <div>
+        @Html.SaveButton()
+        @Html.CancelButton(Url.Action("Index"))
+    </div>
+}
