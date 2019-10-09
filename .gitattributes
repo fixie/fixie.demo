@@ -1,0 +1,16 @@
+*.cmd text
+*.sln text
+*.csproj text
+*.cs text diff=csharp
+*.sql text
+*.json text
+*.ps1 text
+*.yml text
+*.txt text
+*.config text
+*.cshtml text
+*.css text
+*.css.map text
+*.js text
+*.js.map text
+*.props text

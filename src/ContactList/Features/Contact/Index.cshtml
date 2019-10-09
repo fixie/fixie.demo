@@ -1,0 +1,32 @@
+﻿@model ContactList.Features.Contact.ContactIndex.ViewModel[]
+@{
+    ViewBag.Title = "Contacts";
+}
+
+<table class="table table-sm table-hover">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th class="text-center">Edit</th>
+        <th class="text-center">Delete</th>
+    </tr>
+
+    @foreach (var contact in Model)
+    {
+        <tr>
+            <td>@contact.Name</td>
+            <td>@contact.Email</td>
+            <td class="text-nowrap">@contact.PhoneNumber</td>
+            <td class="text-center">@Html.EditButton(Url.Action("Edit", new { contact.Id }))</td>
+            <td class="text-center">
+                @Html.DeleteButton(
+                    Url.Action("Delete", new { contact.Id, contact.Name }),
+                    contact.Name)
+            </td>
+        </tr>
+    }
+</table>
+<div>
+    @Html.Button("Add Contact", Url.Action("Add"))
+</div>

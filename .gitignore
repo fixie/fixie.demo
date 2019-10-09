@@ -1,0 +1,7 @@
+/src/.vs/
+/src/**/bin/
+/src/**/obj/
+/src/*.sln.DotSettings.user
+/src/**/*.csproj.user
+/src/ContactList.DatabaseMigration/packages/
+/publish/
