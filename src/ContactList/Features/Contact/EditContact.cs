@@ -25,7 +25,7 @@
                 _mapper = mapper;
             }
 
-            protected override Command HandleCore(Query message)
+            protected override Command Handle(Query message)
             {
                 var contact = _database.Contact.Find(message.Id);
 
@@ -66,7 +66,7 @@
                 _mapper = mapper;
             }
 
-            protected override void HandleCore(Command message)
+            protected override void Handle(Command message)
             {
                 var contact = _database.Contact.Find(message.Id);
 

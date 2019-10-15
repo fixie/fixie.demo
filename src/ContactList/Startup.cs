@@ -1,4 +1,6 @@
-﻿namespace ContactList
+﻿using Microsoft.Extensions.Hosting;
+
+namespace ContactList
 {
     using System.Reflection;
     using AutoMapper;
@@ -48,10 +50,9 @@
             services.AddDbContext<Database>(options => options.UseSqlServer(connectionString));
             services.AddMediatR(assembly);
             services.AddAutoMapper(assembly);
-            Mapper.Configuration.AssertConfigurationIsValid();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -60,7 +61,16 @@
 
             app.UseStaticFiles();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

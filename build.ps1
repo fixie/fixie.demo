@@ -9,7 +9,7 @@
 #     Builds a clean local copy, rebuilding databases instead of updating them.
 
 main {
-    $targetFramework = "net471"
+    $targetFramework = "netcoreapp3.0"
     $configuration = 'Release'
 
     $connectionStrings = @{

@@ -1,9 +1,9 @@
 ﻿namespace ContactList
 {
     using System;
-    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
     using Serilog;
 
     public class Program
@@ -16,7 +16,7 @@
 
             try
             {
-                BuildWebHost(args).Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception exception)
@@ -30,14 +30,16 @@
             }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(x =>
                 {
                     x.AddEnvironmentVariables(ApplicationName + ":");
                 })
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .Build();
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSerilog();
+                });
     }
 }

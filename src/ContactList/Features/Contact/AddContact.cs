@@ -45,7 +45,7 @@
                 _mapper = mapper;
             }
 
-            protected override Response HandleCore(Command message)
+            protected override Response Handle(Command message)
             {
                 var contact = _mapper.Map<Contact>(message);
 
