@@ -21,7 +21,7 @@
                 _database = database;
             }
 
-            protected override void HandleCore(Command message)
+            protected override void Handle(Command message)
             {
                 var contact = _database.Contact.Find(message.Id);
 

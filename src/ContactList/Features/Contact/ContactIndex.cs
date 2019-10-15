@@ -29,7 +29,7 @@
                 _mapper = mapper;
             }
 
-            protected override ViewModel[] HandleCore(Query request)
+            protected override ViewModel[] Handle(Query request)
             {
                 return _database.Contact
                     .OrderBy(x => x.Name)
