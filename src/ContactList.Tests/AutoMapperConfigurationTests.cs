@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-
-namespace ContactList.Tests
+﻿namespace ContactList.Tests
 {
+    using AutoMapper;
     using static Testing;
 
     class AutoMapperConfigurationTests

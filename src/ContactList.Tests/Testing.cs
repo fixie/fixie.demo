@@ -3,6 +3,8 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
     using System.Threading.Tasks;
     using ContactList.Model;
     using FluentValidation;
@@ -10,7 +12,6 @@
     using MediatR;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json;
 
     public static class Testing
     {
@@ -34,10 +35,11 @@
             ScopeFactory = rootContainer.GetService<IServiceScopeFactory>();
         }
 
-        public static string Json(object value)
-        {
-            return JsonConvert.SerializeObject(value, Formatting.Indented);
-        }
+        public static string Json(object value) =>
+            JsonSerializer.Serialize(value, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
 
         public static void Scoped<TService>(Action<TService> action)
         {
