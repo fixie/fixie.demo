@@ -8,7 +8,7 @@
 
     public class Program
     {
-        public static readonly string ApplicationName = typeof(Program).Assembly.GetName().Name;
+        public static readonly string ApplicationName = typeof(Program).Assembly.GetName().Name!;
 
         public static int Main(string[] args)
         {
