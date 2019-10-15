@@ -43,31 +43,29 @@
 
         public static void Scoped<TService>(Action<TService> action)
         {
-            using (var scope = ScopeFactory.CreateScope())
-                action(scope.ServiceProvider.GetService<TService>());
+            using var scope = ScopeFactory.CreateScope();
+            action(scope.ServiceProvider.GetService<TService>());
         }
 
         public static async Task Send(IRequest message)
         {
-            using (var scope = ScopeFactory.CreateScope())
+            using var scope = ScopeFactory.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+
+            Validator(serviceProvider, message)?.Validate(message).ShouldBeSuccessful();
+
+            var database = serviceProvider.GetService<Database>();
+
+            try
             {
-                var serviceProvider = scope.ServiceProvider;
-
-                Validator(serviceProvider, message)?.Validate(message).ShouldBeSuccessful();
-
-                var database = serviceProvider.GetService<Database>();
-
-                try
-                {
-                    database.BeginTransaction();
-                    await serviceProvider.GetService<IMediator>().Send(message);
-                    database.CloseTransaction();
-                }
-                catch (Exception exception)
-                {
-                    database.CloseTransaction(exception);
-                    throw;
-                }
+                database.BeginTransaction();
+                await serviceProvider.GetService<IMediator>().Send(message);
+                database.CloseTransaction();
+            }
+            catch (Exception exception)
+            {
+                database.CloseTransaction(exception);
+                throw;
             }
         }
 
@@ -75,25 +73,23 @@
         {
             TResponse response;
 
-            using (var scope = ScopeFactory.CreateScope())
+            using var scope = ScopeFactory.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+
+            Validator(serviceProvider, message)?.Validate(message).ShouldBeSuccessful();
+
+            var database = serviceProvider.GetService<Database>();
+
+            try
             {
-                var serviceProvider = scope.ServiceProvider;
-
-                Validator(serviceProvider, message)?.Validate(message).ShouldBeSuccessful();
-
-                var database = serviceProvider.GetService<Database>();
-
-                try
-                {
-                    database.BeginTransaction();
-                    response = await serviceProvider.GetService<IMediator>().Send(message);
-                    database.CloseTransaction();
-                }
-                catch (Exception exception)
-                {
-                    database.CloseTransaction(exception);
-                    throw;
-                }
+                database.BeginTransaction();
+                response = await serviceProvider.GetService<IMediator>().Send(message);
+                database.CloseTransaction();
+            }
+            catch (Exception exception)
+            {
+                database.CloseTransaction(exception);
+                throw;
             }
 
             return response;
@@ -101,21 +97,19 @@
 
         public static void Transaction(Action<Database> action)
         {
-            using (var scope = ScopeFactory.CreateScope())
-            {
-                var database = scope.ServiceProvider.GetService<Database>();
+            using var scope = ScopeFactory.CreateScope();
+            var database = scope.ServiceProvider.GetService<Database>();
 
-                try
-                {
-                    database.BeginTransaction();
-                    action(database);
-                    database.CloseTransaction();
-                }
-                catch (Exception exception)
-                {
-                    database.CloseTransaction(exception);
-                    throw;
-                }
+            try
+            {
+                database.BeginTransaction();
+                action(database);
+                database.CloseTransaction();
+            }
+            catch (Exception exception)
+            {
+                database.CloseTransaction(exception);
+                throw;
             }
         }
 
@@ -143,17 +137,15 @@
 
         public static ValidationResult Validation<TResult>(IRequest<TResult> message)
         {
-            using (var scope = ScopeFactory.CreateScope())
-            {
-                var serviceProvider = scope.ServiceProvider;
+            using var scope = ScopeFactory.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
 
-                var validator = Validator(serviceProvider, message);
+            var validator = Validator(serviceProvider, message);
 
-                if (validator == null)
-                    throw new Exception($"There is no validator for {message.GetType()} messages.");
+            if (validator == null)
+                throw new Exception($"There is no validator for {message.GetType()} messages.");
 
-                return validator.Validate(message);
-            }
+            return validator.Validate(message);
         }
 
         static IValidator Validator<TResult>(IServiceProvider serviceProvider, IRequest<TResult> message)
