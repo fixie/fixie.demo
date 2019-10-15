@@ -48,7 +48,6 @@
             services.AddDbContext<Database>(options => options.UseSqlServer(connectionString));
             services.AddMediatR(assembly);
             services.AddAutoMapper(assembly);
-            Mapper.Configuration.AssertConfigurationIsValid();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

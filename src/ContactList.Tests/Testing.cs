@@ -39,6 +39,12 @@
             return JsonConvert.SerializeObject(value, Formatting.Indented);
         }
 
+        public static void Scoped<TService>(Action<TService> action)
+        {
+            using (var scope = ScopeFactory.CreateScope())
+                action(scope.ServiceProvider.GetService<TService>());
+        }
+
         public static async Task Send(IRequest message)
         {
             using (var scope = ScopeFactory.CreateScope())
