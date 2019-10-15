@@ -30,7 +30,7 @@
             CloseTransaction(exception: null);
         }
 
-        public void CloseTransaction(Exception exception)
+        public void CloseTransaction(Exception? exception)
         {
             try
             {
