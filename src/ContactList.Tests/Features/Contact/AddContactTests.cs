@@ -11,8 +11,8 @@
         {
             new AddContact.Command()
                 .ShouldNotValidate(
-                    "'Email' should not be empty.",
-                    "'Name' should not be empty.");
+                    "'Email' must not be empty.",
+                    "'Name' must not be empty.");
         }
 
         public void ShouldRequireValidEmailAddress()
@@ -23,7 +23,7 @@
                 PhoneNumber = "555-123-9999"
             };
 
-            command.ShouldNotValidate("'Email' should not be empty.");
+            command.ShouldNotValidate("'Email' must not be empty.");
 
             command.Email = "test@example.com";
             command.ShouldValidate();
