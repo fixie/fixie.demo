@@ -4,7 +4,6 @@
     using System.IO;
     using System.Linq;
     using System.Text.Json;
-    using System.Text.Json.Serialization;
     using System.Threading.Tasks;
     using ContactList.Model;
     using FluentValidation;
@@ -115,14 +114,21 @@
 
         public static TResult Query<TResult>(Func<Database, TResult> query)
         {
-            var result = default(TResult);
+            using var scope = ScopeFactory.CreateScope();
+            var database = scope.ServiceProvider.GetService<Database>();
 
-            Transaction(database =>
+            try
             {
-                result = query(database);
-            });
-
-            return result;
+                database.BeginTransaction();
+                var result = query(database);
+                database.CloseTransaction();
+                return result;
+            }
+            catch (Exception exception)
+            {
+                database.CloseTransaction(exception);
+                throw;
+            }
         }
 
         public static TEntity Query<TEntity>(Guid id) where TEntity : Entity
