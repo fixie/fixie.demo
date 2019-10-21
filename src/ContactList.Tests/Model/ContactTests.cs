@@ -9,12 +9,7 @@
     {
         public void ShouldPersist()
         {
-            var contact = new Contact
-            {
-                Email = "email@example.com",
-                Name = "First Last",
-                PhoneNumber = "555-123-4567"
-            };
+            var contact = new Contact("email@example.com", "First Last", "555-123-4567");
 
             contact.Id.ShouldBe(Guid.Empty);
 
