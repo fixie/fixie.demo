@@ -35,7 +35,7 @@
             ScopeFactory = rootContainer.GetService<IServiceScopeFactory>();
         }
 
-        public static string Json(object value) =>
+        public static string Json(object? value) =>
             JsonSerializer.Serialize(value, new JsonSerializerOptions
             {
                 WriteIndented = true
