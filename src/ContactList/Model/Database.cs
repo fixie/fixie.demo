@@ -15,7 +15,7 @@
         {
         }
 
-        public DbSet<Contact> Contact { get; set; }
+        public DbSet<Contact> Contact { get; set; } = default!;
 
         public void BeginTransaction()
         {
