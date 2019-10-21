@@ -8,7 +8,7 @@
 
     public class Database : DbContext
     {
-        IDbContextTransaction _currentTransaction;
+        IDbContextTransaction? _currentTransaction;
 
         public Database(DbContextOptions<Database> options)
             : base(options)
@@ -32,6 +32,9 @@
 
         public void CloseTransaction(Exception? exception)
         {
+            if (_currentTransaction == null)
+                throw new InvalidOperationException("A transaction cannot be closed, because no transaction has been started.");
+
             try
             {
                 if (exception != null)
