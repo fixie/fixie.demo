@@ -47,27 +47,9 @@
             result
                 .Where(x => expectedIds.Contains(x.Id))
                 .ShouldMatch(
-                    new ContactIndex.ViewModel
-                    {
-                        Id = abeId,
-                        Name = "Abe",
-                        Email = "abe@example.com",
-                        PhoneNumber = "555-123-0003"
-                    },
-                    new ContactIndex.ViewModel
-                    {
-                        Id = benId,
-                        Name = "Ben",
-                        Email = "ben@example.com",
-                        PhoneNumber = "555-123-0001"
-                    },
-                    new ContactIndex.ViewModel
-                    {
-                        Id = cathyId,
-                        Name = "Cathy",
-                        Email = "cathy@example.com",
-                        PhoneNumber = "555-123-0002"
-                    }
+                    new ContactIndex.ViewModel("Abe", "abe@example.com", "555-123-0003") { Id = abeId },
+                    new ContactIndex.ViewModel("Ben", "ben@example.com", "555-123-0001") { Id = benId },
+                    new ContactIndex.ViewModel("Cathy", "cathy@example.com", "555-123-0002") { Id = cathyId }
                 );
         }
     }

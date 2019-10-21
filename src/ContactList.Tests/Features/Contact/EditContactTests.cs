@@ -95,12 +95,9 @@
 
             var actual = Query<Contact>(selectedContactId);
 
-            actual.ShouldMatch(new Contact
+            actual.ShouldMatch(new Contact("pjones@example.com", "Patrick Jones", "555-123-0002")
             {
-                Id = selectedContactId,
-                Email = "pjones@example.com",
-                Name = "Patrick Jones",
-                PhoneNumber = "555-123-0002"
+                Id = selectedContactId
             });
         }
     }

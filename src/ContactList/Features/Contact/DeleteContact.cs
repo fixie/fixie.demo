@@ -9,7 +9,7 @@
         public class Command : IRequest
         {
             public Guid Id { get; set; }
-            public string Name { get; set; }
+            public string? Name { get; set; }
         }
 
         public class CommandHandler : RequestHandler<Command>
