@@ -148,7 +148,7 @@
             return validator.Validate(message);
         }
 
-        static IValidator Validator<TResult>(IServiceProvider serviceProvider, IRequest<TResult> message)
+        static IValidator? Validator<TResult>(IServiceProvider serviceProvider, IRequest<TResult> message)
         {
             var validatorType = typeof(IValidator<>).MakeGenericType(message.GetType());
             return serviceProvider.GetService(validatorType) as IValidator;
