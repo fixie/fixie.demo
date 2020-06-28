@@ -15,16 +15,22 @@
     {
         static readonly IServiceScopeFactory ScopeFactory;
 
+        public static TestSettings Settings { get; }
 
         static Testing()
         {
             var commandLineArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
             var serviceProvider = Program.CreateHostBuilder(commandLineArgs)
+                .ConfigureServices((context, services) =>
+                {
+                    services.Configure<TestSettings>(context.Configuration);
+                })
                 .Build()
                 .Services;
 
             ScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
+            Settings = serviceProvider.GetService<IOptions<TestSettings>>().Value;
         }
 
         public static string Json(object? value) =>
