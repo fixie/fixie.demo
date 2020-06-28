@@ -1,4 +1,4 @@
-﻿namespace ContactList
+namespace ContactList
 {
     using System;
     using Microsoft.AspNetCore.Hosting;

@@ -1,7 +1,6 @@
 ﻿namespace ContactList.Tests
 {
     using System;
-    using System.IO;
     using System.Linq;
     using System.Text.Json;
     using System.Threading.Tasks;
@@ -9,29 +8,29 @@
     using FluentValidation;
     using FluentValidation.Results;
     using MediatR;
-    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Options;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class Testing
     {
         static readonly IServiceScopeFactory ScopeFactory;
 
-        public static IConfigurationRoot Configuration { get; }
+        public static TestSettings Settings { get; }
 
         static Testing()
         {
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables(Program.ApplicationName + ":")
-                .Build();
+            var commandLineArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
-            var startup = new Startup(Configuration);
-            var services = new ServiceCollection();
-            startup.ConfigureServices(services);
+            var serviceProvider = Program.CreateHostBuilder(commandLineArgs)
+                .ConfigureServices((context, services) =>
+                {
+                    services.Configure<TestSettings>(context.Configuration);
+                })
+                .Build()
+                .Services;
 
-            var rootContainer = services.BuildServiceProvider();
-            ScopeFactory = rootContainer.GetService<IServiceScopeFactory>();
+            ScopeFactory = serviceProvider.GetService<IServiceScopeFactory>();
+            Settings = serviceProvider.GetService<IOptions<TestSettings>>().Value;
         }
 
         public static string Json(object? value) =>

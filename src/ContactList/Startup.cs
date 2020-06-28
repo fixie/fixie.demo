@@ -1,5 +1,3 @@
-﻿using Microsoft.Extensions.Hosting;
-
 namespace ContactList
 {
     using System.Reflection;
@@ -14,6 +12,7 @@ namespace ContactList
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Model;
     using Serilog;
 
