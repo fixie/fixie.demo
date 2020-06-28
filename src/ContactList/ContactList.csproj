@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
 </Project>
