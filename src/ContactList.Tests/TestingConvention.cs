@@ -1,29 +1,47 @@
 ﻿namespace ContactList.Tests
 {
+    using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
     using Fixie;
     using static System.Environment;
     using static Testing;
 
     public class TestingConvention : Execution
     {
-        public void Execute(TestClass testClass)
+        public async Task ExecuteAsync(TestClass testClass)
         {
-            testClass.RunCases(@case =>
+            var instance = testClass.Construct();
+            var methodWasExplicitlyRequested = testClass.Tests != null;
+
+            foreach (var test in testClass.Tests)
             {
-                var instance = testClass.Construct();
+                await test.RunCasesAsync(UsingInputAttributes, instance);
 
-                @case.Execute(instance);
+                MethodInfo dispose = instance.GetType().GetMethod("Dispose");
+                MethodInfoExtensions.Execute(dispose, instance, dispose.GetParameters());
 
-                instance.Dispose();
+                //if (methodWasExplicitlyRequested && @case.Exception is MatchException exception)
+                //    LaunchDiffTool(exception);
+            }
+        }
 
-                var methodWasExplicitlyRequested = testClass.TargetMethod != null;
+        static IEnumerable<object[]> UsingInputAttributes(MethodInfo method)
+           => method.GetCustomAttributes<InputAttribute>(true).Select(input => input.Parameters);
 
-                if (methodWasExplicitlyRequested && @case.Exception is MatchException exception)
-                    LaunchDiffTool(exception);
-            });
+        [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+        class InputAttribute : Attribute
+        {
+            public InputAttribute(params object[] parameters)
+            {
+                Parameters = parameters;
+            }
+
+            public object[] Parameters { get; }
         }
 
         static void LaunchDiffTool(MatchException exception)

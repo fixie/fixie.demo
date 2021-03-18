@@ -1,7 +1,7 @@
 ﻿<Project>
     <PropertyGroup>
         <Nullable>enable</Nullable>
-        <FixieVersion>2.2.0</FixieVersion>
+        <FixieVersion>3.0.0-beta.1</FixieVersion>
         <ShouldlyVersion>3.0.2</ShouldlyVersion>
     </PropertyGroup>
 </Project>
